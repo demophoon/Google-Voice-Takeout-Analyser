@@ -12,5 +12,6 @@ setup(
         'beautifulsoup4',
         'python-dateutil',
         'sqlalchemy',
+        'textblob',
     ],
 )
