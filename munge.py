@@ -43,6 +43,7 @@ def main():
     messages = map(parse_messages, get_files_list())
     f = open('output.json', 'w')
     f.write(json.dumps(messages))
+    f.close()
 
 if __name__ == '__main__':
     main()
