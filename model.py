@@ -19,7 +19,7 @@ class Contact(Base):
     __tablename__ = 'contacts'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String, unique=True)
+    name = Column(String)
     phone = Column(String, unique=True)
 
     messages = relationship("Message", back_populates='message_to')
@@ -54,14 +54,11 @@ class Message(Base):
     def __repr__(self):
         return '<Message %s>' % (self.message)
 
-if __name__ == '__main__':
-    engine = create_engine('sqlite:///texts.sqlite')
-    Base.metadata.create_all(engine)
-    Session = sessionmaker(autoflush=False)
-    Session.configure(bind=engine)
-    session = Session()
 
-    contacts = []
+def import_data():
+    session = create_session()
+
+    contacts = {}
     messages = []
 
     f = open('output.json', 'r')
@@ -72,11 +69,11 @@ if __name__ == '__main__':
                 contact = Contact(message['sender'], message['number'])
                 session.add(contact)
                 session.flush()
-                contacts.append(message['number'])
+                contacts[message['number']] = contact
             tb = TextBlob(message['content'])
             m = Message(
                 message['content'],
-                contact.id,
+                contacts[message['number']].id,
                 message['to'],
                 dateutil.parser.parse(message['timestamp']),
             )
@@ -91,3 +88,11 @@ if __name__ == '__main__':
         session.flush()
         session.commit()
     print "Done."
+
+
+def create_session():
+    engine = create_engine('sqlite:///texts.sqlite')
+    Base.metadata.create_all(engine)
+    Session = sessionmaker(autoflush=False)
+    Session.configure(bind=engine)
+    return Session()
