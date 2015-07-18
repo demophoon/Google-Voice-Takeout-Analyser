@@ -13,5 +13,7 @@ setup(
         'python-dateutil',
         'sqlalchemy',
         'textblob',
+        'numpy',
+        'matplotlib',
     ],
 )
