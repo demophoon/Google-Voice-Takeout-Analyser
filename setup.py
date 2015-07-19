@@ -16,4 +16,8 @@ setup(
         'numpy',
         'matplotlib',
     ],
+    entry_points="""\
+    [console_scripts]
+    import_data = scripts:run_import
+    """
 )
