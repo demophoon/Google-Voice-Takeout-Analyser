@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 
 def parse_messages(input_file):
+    print "Reading messages from {}".format(input_file)
     msg_to = input_file[6:].split(' - ')[0]
     f = open(input_file, 'r')
     soup = BeautifulSoup(f.read(), 'html.parser')
